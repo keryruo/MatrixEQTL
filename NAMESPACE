@@ -1,0 +1,31 @@
+importFrom(methods, setRefClass)
+exportPattern("^[[:alpha:]]+")
+exportClasses(
+    "SlicedData" 
+)
+S3method(plot, MatrixEQTL)
+S3method(summary, SlicedData)
+exportMethods(
+    "[[",
+    "[[<-",
+    "colnames",
+    "colnames<-",
+    "dim",
+    "length",
+    "ncol",
+    "NCOL",
+    "nrow",
+    "NROW",
+    "rownames",
+    "rownames<-",
+    "as.matrix",
+    "rowMeans",
+    "rowSums",
+    "colMeans",
+    "colSums"
+)
+
+importFrom("graphics", "abline", "legend", "lines", "par", "plot", "points", "title")
+importFrom("methods", "new")
+importFrom("stats", "complete.cases", "pf", "pt", "qf", "qt")
+importFrom("utils", "flush.console", "tail", "tail.matrix")
