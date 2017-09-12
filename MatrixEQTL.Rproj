@@ -19,3 +19,4 @@ PackageUseDevtools: Yes
 PackageInstallArgs: --no-multiarch --with-keep.source  --no-resave-data
 PackageBuildArgs: --no-resave-data
 PackageBuildBinaryArgs: --no-resave-data
+PackageCheckArgs: --as-cran
