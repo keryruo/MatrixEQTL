@@ -1886,8 +1886,11 @@ plot.MatrixEQTL = function(x, cex = 0.5, pch = 19, xlim = NULL, ylim = NULL, mai
 		if(is.null(xlim))
 			xlim =  c(0, -log10(xmin/1.5));
 		
-		plot(numeric(),numeric(), xlab = "-Log10(p-value), theoretical",
-			ylab = "-Log10(p-value), observed",
+		plot(numeric(),numeric(), 
+			xlab = expression('\u2013 log'[10]*'(p-value), expected under null'),
+			ylab = expression('\u2013 log'[10]*'(p-value), observed'),
+			# xlab = "-Log10(p-value), theoretical",
+			# ylab = "-Log10(p-value), observed",
 			xlim = c(0, -log10(xmin/1.5)),
 			ylim = ylim,
 			xaxs="i", yaxs="i", ...);
