@@ -827,11 +827,10 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
  				tests = testfun1[[1]](cdata$unlist());
  				cdata <<- .listBuilder$new();
  				
- 				pvalues = pvfun1[[1]](tests);
- 				ord = order(pvalues);
- 				
+ 				ord = sort.list(abs(tests), decreasing = TRUE);
+
  				tests = tests[ord];
- 				pvalues = pvalues[ord];
+ 				pvalues = pvfun1[[1]](tests);
  				
  				FDR = pvalues * FDR_total_count / (1:length(pvalues));
  				FDR[length(FDR)] = min(FDR[length(FDR)], 1);
