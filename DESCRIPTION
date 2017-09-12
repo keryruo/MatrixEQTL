@@ -1,10 +1,10 @@
 Package: MatrixEQTL
 Type: Package
 Title: Matrix eQTL: Ultra Fast eQTL Analysis via Large Matrix Operations
-Version: 2.1.2
-Date: 2015-08-20
-Author: Andrey Shabalin
-Maintainer: Andrey Shabalin <ashabalin@vcu.edu>
+Version: 2.1.4
+Date: 2017-09-12
+Author: Andrey A Shabalin
+Maintainer: Andrey A Shabalin <andrey.shabalin@gmail.com>
 Description: Matrix eQTL is designed for fast eQTL analysis on large datasets.
 	Matrix eQTL can test for association between genotype and gene expression using linear regression 
 	with either additive or ANOVA genotype effects.
