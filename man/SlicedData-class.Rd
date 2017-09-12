@@ -40,7 +40,7 @@
 	The package website: \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
 }
 \author{
-	Andrey Shabalin \email{ashabalin@vcu.edu}
+	Andrey A Shabalin \email{andrey.shabalin@gmail.com}
 }
 \seealso{
 	This class is used to load data for eQTL analysis by \code{\link{Matrix_eQTL_engine}}.

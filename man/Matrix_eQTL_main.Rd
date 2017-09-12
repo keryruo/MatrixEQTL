@@ -166,7 +166,7 @@ Matrix_eQTL_engine(snps,
 	The package website: \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
 }
 \author{
-	Andrey Shabalin \email{ashabalin@vcu.edu}
+	Andrey A Shabalin \email{andrey.shabalin@gmail.com}
 }
 \seealso{
 	The code below is the sample code for eQTL analysis NOT using gene/SNP locations.	

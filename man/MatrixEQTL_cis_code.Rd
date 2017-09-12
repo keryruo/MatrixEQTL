@@ -12,7 +12,7 @@
   See \code{\link{Matrix_eQTL_engine}} for reference and other sample code.
 }
 \author{
-  Andrey Shabalin \email{ashabalin@vcu.edu}
+  Andrey A Shabalin \email{andrey.shabalin@gmail.com}
 }
 \examples{
 # Matrix eQTL by Andrey A. Shabalin

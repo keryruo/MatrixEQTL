@@ -52,7 +52,7 @@ for all tests performed by \code{\link{Matrix_eQTL_engine}}.
 	QQ-plot: \figure{QQplot.png}
 }
 \author{
-	Andrey Shabalin \email{ashabalin@vcu.edu}
+	Andrey A Shabalin \email{andrey.shabalin@gmail.com}
 }
 \examples{
 library(MatrixEQTL)

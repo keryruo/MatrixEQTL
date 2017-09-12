@@ -23,9 +23,9 @@
 	}
 }
 \author{
-	Andrey Shabalin \email{ashabalin@vcu.edu}
+	Andrey A Shabalin \email{andrey.shabalin@gmail.com}
 	
-	Maintainer: Andrey Shabalin <ashabalin@vcu.edu>
+	Maintainer: Andrey A Shabalin <andrey.shabalin@gmail.com>
 }
 \references{
 	The package website: \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
