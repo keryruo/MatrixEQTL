@@ -136,7 +136,7 @@ SlicedData <- setRefClass( "SlicedData",
 				# read sliceSize rows
 				rowtag = vector("character",fileSliceSize);
 				rowvals = vector("list",fileSliceSize);
-				for(i in 1:fileSliceSize) {
+				for(i in seq_len(fileSliceSize)) {
 					temp = "";
 					if( fileSkipColumns > 0L ) {
 						temp = scan(file = fid, what = character(), n = fileSkipColumns, quiet = TRUE,sep = fileDelimiter);
@@ -178,7 +178,7 @@ SlicedData <- setRefClass( "SlicedData",
 			}
 			if( fileSkipColumns == 0 ) {
 				cnt = 0L;
-				for( sl in 1:nSlices() ) {
+				for( sl in seq_len(nSlices()) ) {
 					nr = length(getSliceRaw(sl));
 					rowNameSlices[[sl]] <<- paste("Row_",cnt + (1:nr),sep="");
 					cnt = cnt + nr;
@@ -194,7 +194,7 @@ SlicedData <- setRefClass( "SlicedData",
 				return();
 			}
 			fid = file(filename,"wt");
-			for( sl in 1:nSlices() ) {
+			for( sl in seq_len(nSlices()) ) {
 				z = getSlice(sl);
 				rownames(z) = rowNameSlices[[sl]];
 				colnames(z) = columnNames;
@@ -205,7 +205,7 @@ SlicedData <- setRefClass( "SlicedData",
 		},
 		nRows = function() {
 			s = 0L;
-			for(sl in .seq(1,nSlices())) {
+			for(sl in seq_len(nSlices())) {
 				s = s + nrow(getSliceRaw(sl));
 			}
 			return( s )
@@ -218,7 +218,7 @@ SlicedData <- setRefClass( "SlicedData",
 			}
 		},
 		Clear = function() {
-			for( sl in .seq(1,nSlices()) ) {
+			for( sl in seq_len(nSlices()) ) {
 				rm(list = paste(sl), envir = dataEnv)
 			}
 			nSlices1 <<- 0L;
@@ -239,7 +239,7 @@ SlicedData <- setRefClass( "SlicedData",
 			if( (nCols() == 0L) ) {
 				return(invisible(.self));
 			}
-			for( sl in .seq(1,nSlices()) ) {
+			for( sl in seq_len(nSlices()) ) {
 				slice = getSlice(sl);
 				if( any(is.na(slice)) ) {
 					rowmean = rowMeans(slice, na.rm = TRUE);
@@ -254,7 +254,7 @@ SlicedData <- setRefClass( "SlicedData",
 			return(invisible(.self));
 		},
 		RowStandardizeCentered = function() {
-			for(sl in .seq(1,nSlices()) ) {
+			for(sl in seq_len(nSlices()) ) {
 				slice = getSlice(sl);
 				div = sqrt( rowSums(slice^2) );
 				div[ div == 0 ] = 1;
@@ -271,14 +271,14 @@ SlicedData <- setRefClass( "SlicedData",
 			datatypes = c("raw","integer","double");
 			datafuns = c(as.raw, as.integer, as.double);
 			datatype = character(nSlices());
-			for(sl in 1:nSlices()) {
+			for(sl in seq_len(nSlices())) {
 				datatype[sl] = typeof(getSliceRaw(sl));
 			}
 			mch = max(match(datatype,datatypes,nomatch = length(datatypes)));
 			datafun = datafuns[[mch]];
 			newData = matrix(datafun(0), nrow = nr, ncol = nc);
 			offset = 0;
-			for(sl in 1:nSlices()) {
+			for(sl in seq_len(nSlices())) {
 				if(mch==1) {
 					slice = getSliceRaw(sl);
 				} else {
@@ -313,7 +313,7 @@ SlicedData <- setRefClass( "SlicedData",
 				oldData = getSliceRaw(1L);
 				#oldNames = rowNameSlices[[1]];
 				newNameslices = vector("list",newNSlices)
-				for( sl in 1:newNSlices ) {
+				for( sl in seq_len(newNSlices) ) {
 					range = (1+(sl-1)*fileSliceSize) : (min(nRows1,sl*fileSliceSize));
 					newpart = oldData[range, ,drop = FALSE];
 					if( is.raw(oldData) ) {
@@ -331,7 +331,7 @@ SlicedData <- setRefClass( "SlicedData",
 		},
 		Clone = function() {
 			clone = SlicedData$new();
-			for(sl in .seq(1,nSlices()) ) {
+			for(sl in seq_len(nSlices()) ) {
 				clone$setSliceRaw(sl,getSliceRaw(sl));
 			}
 			clone$rowNameSlices = rowNameSlices;
@@ -344,13 +344,13 @@ SlicedData <- setRefClass( "SlicedData",
 			return( clone );		
 		},
 		RowMatrixMultiply = function(multiplier) {
-			for(sl in .seq(1,nSlices()) ) {
+			for(sl in seq_len(nSlices()) ) {
 				setSlice(sl, getSlice(sl) %*% multiplier);
 			}
 			return(invisible(.self));
 		},
 		ColumnSubsample = function(subset) {
-			for(sl in .seq(1,nSlices()) ) {
+			for(sl in seq_len(nSlices()) ) {
 				setSliceRaw(sl, getSliceRaw(sl)[ ,subset, drop = FALSE]);
 			}
 			columnNames <<- columnNames[subset];
@@ -393,7 +393,7 @@ SlicedData <- setRefClass( "SlicedData",
 			#}
 			## slice the data into individual rows
 			all_rows = vector("list", nSlices())
-			for( i in 1:nSlices() ) {
+			for( i in seq_len(nSlices()) ) {
 				slice = getSliceRaw(i)
 				all_rows[[i]] = split(slice, 1:nrow(slice))
 				setSliceRaw(i,numeric())
@@ -414,7 +414,7 @@ SlicedData <- setRefClass( "SlicedData",
 			nSlices1 <<- as.integer((nrows+fileSliceSize-1)/fileSliceSize);
 			##cat(nrows, " ", nSlices1);
 			rowNameSlices1 = vector("list", nSlices1);
-			for( i in 1:nSlices1 ) {
+			for( i in seq_len(nSlices1) ) {
 				fr = 1 + fileSliceSize*(i-1);
 				to = min( fileSliceSize*i, nrows);
 	
@@ -442,7 +442,7 @@ SlicedData <- setRefClass( "SlicedData",
 			return(invisible(.self));
 		},
 		RowRemoveZeroEps = function(){
-			for(sl in .seq(1,nSlices()) ) {
+			for(sl in seq_len(nSlices()) ) {
 				slice = getSlice(sl);
 				amean = rowMeans(abs(slice));
 				remove = (amean < .Machine$double.eps*nCols());
@@ -454,7 +454,7 @@ SlicedData <- setRefClass( "SlicedData",
 			return(invisible(.self));
 		},
 		FindRow = function(rowname) {
-			for(sl in .seq(1,nSlices()) ) {
+			for(sl in seq_len(nSlices()) ) {
 				mch = match(rowname,rowNameSlices[[sl]], nomatch = 0);
 				if( mch > 0 )
 				{
@@ -580,7 +580,7 @@ setMethod("rownames<-", "SlicedData", function(x,value) {
 		stopifnot( length(value) == x$nRows() );
 		start = 1;
 		newNameSlices = vector("list", x$nSlices());
-		for( i in .seq(1,x$nSlices()) ) {
+		for( i in seq_len(x$nSlices()) ) {
 			nr = nrow(x$getSliceRaw(i));
 			newNameSlices[[i]] = value[ start:(start+nr-1) ];
 			start = start + nr;
@@ -595,7 +595,7 @@ setMethod("rowSums", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 		}
 		stopifnot( dims == 1 );
 		thesum = vector("list", x$nSlices());
-		for( i in 1:x$nSlices() ) {
+		for( i in seq_len(x$nSlices()) ) {
 			thesum[[i]] = rowSums(x$getSlice(i), na.rm)
 		}
 		return(unlist(thesum, recursive = FALSE, use.names = FALSE));
@@ -607,7 +607,7 @@ setMethod("rowMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 		}
 		stopifnot( dims == 1 );
 		thesum = vector("list", x$nSlices());
-		for( i in 1:x$nSlices() ) {
+		for( i in seq_len(x$nSlices()) ) {
 			thesum[[i]] = rowMeans(x$getSlice(i), na.rm)
 		}
 		return(unlist(thesum, recursive = FALSE, use.names = FALSE));
@@ -619,7 +619,7 @@ setMethod("colSums", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 		}
 		stopifnot( dims == 1 );
 		thesum = 0;
-		for( i in .seq(1,x$nSlices()) ) {
+		for( i in seq_len(x$nSlices()) ) {
 			thesum = thesum + colSums(x$getSlice(i), na.rm)
 		}
 		return(thesum);
@@ -632,7 +632,7 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 		stopifnot( dims == 1 );
 		thesum = 0;
 		thecounts = x$nRows();
-		for( i in .seq(1,x$nSlices()) ) {
+		for( i in seq_len(x$nSlices()) ) {
 			slice = x$getSlice(i);
 			thesum = thesum + colSums(slice, na.rm)
 			if( na.rm ) {
@@ -675,9 +675,8 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 			return(base::get(paste(i),dataEnv));
 		},
 		list = function() {
-			if(n==0)	return(list());
 			result = vector("list",n);
-			for( i in 1:n) {
+			for( i in seq_len(n)) {
 				result[[i]] = .self$get(i);
 			}
 			return(result);
@@ -730,11 +729,11 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 	methods = list(
 		initialize = function(snps, gene) {
 			sdata <<- .listBuilder$new();
-			for( ss in 1:snps$nSlices() ) {
+			for( ss in seq_len(snps$nSlices()) ) {
 				sdata$set( ss, double(snps$GetNRowsInSlice(ss)));
 			}
 			gdata <<- .listBuilder$new();
-			for( gg in 1:gene$nSlices() ) {
+			for( gg in seq_len(gene$nSlices()) ) {
 				gdata$set( gg, double(gene$GetNRowsInSlice(gg)));
 			}
 			return(.self);
@@ -849,7 +848,7 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 				
  				if(length(fid)>0)	{	
 					step = 1000; ########### 100000
-					for( part in 1:ceiling(length(FDR)/step) ) {
+					for( part in seq_len(ceiling(length(FDR)/step)) ) {
 	 					fr = (part-1)*step + 1;
 	 					to = min(part*step, length(FDR));
 						dump = data.frame(snps_names[fr:to],
@@ -1001,7 +1000,7 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 	
 	# Table of frequencies for each variable (row)
 	freq = matrix(0, nrow(x), n.groups);
-	for(i in 1:n.groups) {
+	for(i in seq_len(n.groups) ) {
 		freq[ ,i] = rowSums(x==uniq[i], na.rm = TRUE);
 	}
 	# remove NA-s from x for convenience
@@ -1015,7 +1014,7 @@ setMethod("colMeans", "SlicedData", function(x, na.rm = FALSE, dims = 1L) {
 	freq[ cbind(1:nrow(x),md) ] = -1;
 	
 	# The rest form dumm
-	for(j in 1:(n.groups-1)){
+	for(j in seq_len(n.groups-1) ){
 		md = apply(freq, 1, which.max); 
 		freq[ cbind(1:nrow(x),md) ] = -1;
 		rez[[j]] = (x == uniq[md]);
@@ -1326,7 +1325,7 @@ Matrix_eQTL_main = function(
 		# Slice it back.
 		geneloc = vector("list", gene$nSlices())
 		gene_offset = 0;
-		for(gc in 1:gene$nSlices()) {
+		for(gc in seq_len(gene$nSlices()) ) {
 			nr = gene$GetNRowsInSlice(gc);
 			geneloc[[gc]] = gene_pos[gene_offset + (1:nr), , drop = FALSE];
 			gene_offset = gene_offset + nr;	
@@ -1335,7 +1334,7 @@ Matrix_eQTL_main = function(
 		
 		snpsloc = vector("list", snps$nSlices())
 		snps_offset = 0;
-		for(sc in 1:snps$nSlices()) {
+		for(sc in seq_len(snps$nSlices()) ) {
 			nr = snps$GetNRowsInSlice(sc);
 			snpsloc[[sc]] = snps_pos[snps_offset + (1:nr), , drop = FALSE];
 			snps_offset = snps_offset + nr;	
@@ -1380,7 +1379,7 @@ Matrix_eQTL_main = function(
 		# Orthogonolize expression w.r.t. covariates
 		# status("Orthogonolizing expression w.r.t. covariates");
 		gene_offsets = double(gene$nSlices()+1);
-		for( sl in 1:gene$nSlices() ) {
+		for( sl in seq_len(gene$nSlices()) ) {
 			slice = gene$getSlice(sl);
 			gene_offsets[sl+1] = gene_offsets[sl] + nrow(slice);
 			rowsq1 = rowSums(slice^2);
@@ -1540,13 +1539,13 @@ Matrix_eQTL_main = function(
 	################################# Some useful functions #################################
 	{
 		orthonormalize.snps = function(cursnps, ss) {
-			for(p in 1:length(cursnps)) {
+			for(p in seq_along(cursnps)) {
 				if(length(correctionMatrix)>0) {
 					cursnps[[p]] = cursnps[[p]] %*% correctionMatrix;
 				}
 				rowsq1 = rowSums(cursnps[[p]]^2);
 				cursnps[[p]] = cursnps[[p]] - tcrossprod(cursnps[[p]],cvrt) %*% cvrt;
-				for(w in .seq(1L,p-1L))
+				for(w in seq_len(p-1L))
 					cursnps[[p]] = cursnps[[p]] - rowSums(cursnps[[p]]*cursnps[[w]]) * cursnps[[w]];
 				rowsq2 = rowSums(cursnps[[p]]^2);
 				delete.rows = (rowsq2 <= rowsq1 * .Machine$double.eps );
@@ -1638,13 +1637,13 @@ Matrix_eQTL_main = function(
 		# ss = snps$nSlices(); gg = gene$nSlices();
 		
 		snps_offset = 0;
-		for(ss in 1:snps$nSlices()) {
+		for(ss in seq_len(snps$nSlices())) {
 # 		for(ss in 1:min(2,snps$nSlices())) { #for debug
 			cursnps = NULL;
 			nrcs = snps$GetNRowsInSlice(ss);
 			
 			# loop only through the useful stuff
-			for(gg in if(pvOutputThreshold>0){1:gene$nSlices()}else{.seq(gg.1[ss],gg.2[ss])} ) {
+			for(gg in if(pvOutputThreshold>0){seq_len(gene$nSlices())}else{.seq(gg.1[ss],gg.2[ss])} ) {
 				gene_offset = gene_offsets[gg];
 				curgene = gene$getSlice(gg);
 				nrcg = nrow(curgene);
@@ -1663,7 +1662,7 @@ Matrix_eQTL_main = function(
 							cursnps = orthonormalize.snps( snps_process( snps$getSlice(ss) ), ss );
 						}					
 						mat = vector("list", length(cursnps));
-						for(d in 1:length(cursnps)) {
+						for(d in seq_along(cursnps)) {
 							mat[[d]] = tcrossprod(curgene, cursnps[[d]]);
 						}
 						statistic = statistic.fun( mat );
@@ -1715,7 +1714,7 @@ Matrix_eQTL_main = function(
 							cursnps = orthonormalize.snps( snps_process( snps$getSlice(ss) ), ss );
 						}
 						mat = vector("list", length(cursnps));
-						for(d in 1:length(cursnps)) {
+						for(d in seq_along(cursnps)) {
 							mat[[d]] = tcrossprod(curgene, cursnps[[d]]);
 						}
 						statistic = statistic.fun( mat );
