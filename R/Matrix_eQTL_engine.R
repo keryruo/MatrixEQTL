@@ -1066,7 +1066,7 @@ Matrix_eQTL_main = function(
 						min.pv.by.genesnp = FALSE,
 						noFDRsaveMemory = FALSE) {
 	################################# Basic variable checks #################################
- 	{				
+ 	{
 		# status("Performing basic checks of the input variables");
 		stopifnot( "SlicedData" %in% class(gene) );
 		stopifnot( any(c("SlicedData","SlicedData.fmt") %in% class(snps)) );
@@ -1250,7 +1250,7 @@ Matrix_eQTL_main = function(
 		snps_names = rownames(snps);
 		
 		# gene range, set: left<right
-		if(any(genepos[,3] > genepos[,4])) {
+		if( any(genepos[,3] > genepos[,4]) ){
 			temp3 = genepos[,3];
 			temp4 = genepos[,4];
 			genepos[,3] = pmin(temp3,temp4);
@@ -1259,10 +1259,10 @@ Matrix_eQTL_main = function(
 		}
 		
 		# match with the location data
-		genematch = match( gene_names, genepos[ ,1],  nomatch = 0L);
+		genematch = match(gene_names, genepos[ ,1],  nomatch = 0L);
 		usedgene = matrix(FALSE, nrow(genepos), 1); # genes in "genepos" that are matching  "gene_names"
 		usedgene[ genematch ] = TRUE;
-		if( !any(genematch) ) {
+		if( max(genematch) == 0 ) {
 			stop("Gene names do not match those in the gene location file.");
 		}
 		cat( sum(genematch>0), "of", length(gene_names), " genes matched\n");
@@ -1271,7 +1271,7 @@ Matrix_eQTL_main = function(
 		snpsmatch = match( snps_names, snpspos[ ,1],  nomatch = 0L);
 		usedsnps = matrix(FALSE, nrow(snpspos),1);
 		usedsnps[ snpsmatch ] = TRUE;
-		if( !any(snpsmatch) ) {
+		if( max(snpsmatch) == 0 ) {
 			stop("SNP names do not match those in the SNP location file.");
 		}
 		cat( sum(snpsmatch>0), "of", length(snps_names), " SNPs matched\n");
@@ -1281,12 +1281,13 @@ Matrix_eQTL_main = function(
 												 as.character(unique(genepos[usedgene,2])) ))
 		chrNames = chrNames[ sort.list( suppressWarnings(as.integer(chrNames)), 
 																		method = "radix", na.last = TRUE ) ];
+		
 		# match chr names
-		genechr = match(genepos[,2],chrNames);
-		snpschr = match(snpspos[,2],chrNames);
+		genechr = match(genepos[,2], chrNames);
+		snpschr = match(snpspos[,2], chrNames);
 		
 		# max length of a chromosome
-		chrMax = max( snpspos[usedsnps, 3], genepos[usedgene, 4], na.rm = TRUE) + cisDist;
+		chrMax = max(snpspos[usedsnps, 3], genepos[usedgene, 4], na.rm = TRUE) + cisDist;
 		
 		# Single number location for all rows in "genepos" and "snpspos"
  		genepos2 = as.matrix(genepos[ ,3:4, drop = FALSE] + (genechr-1)*chrMax);
