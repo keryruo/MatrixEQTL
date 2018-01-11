@@ -26,15 +26,15 @@ filename = NULL; # tempfile()
 
 # Call the main analysis function
 me = Matrix_eQTL_main(
-	snps = snps1,
-	gene = gene1,
-	cvrt = cvrt1,
-	output_file_name = filename,
-	pvOutputThreshold = 1,
-	useModel = modelANOVA,
-	errorCovariance = diag(noise.std^2),
-	verbose = TRUE,
-	pvalue.hist = FALSE );
+    snps = snps1,
+    gene = gene1,
+    cvrt = cvrt1,
+    output_file_name = filename,
+    pvOutputThreshold = 1,
+    useModel = modelANOVA,
+    errorCovariance = diag(noise.std^2),
+    verbose = TRUE,
+    pvalue.hist = FALSE );
 
 # Pull Matrix eQTL results - t-statistic and p-value
 
@@ -43,14 +43,14 @@ pvalue = me$all$eqtls$pvalue;
 rez = c( Fstat = fstat, pvalue = pvalue);
 # And compare to those from ANOVA in R
 {
-	cat("\n\n Matrix eQTL: \n");
-	print(rez);
-	cat("\n R anova(lm()) output: \n");
-	lmdl = lm( gene.mat ~ cvrt.mat + factor(snps.mat),
-						 weights = 1/noise.std^2 );
-	lmout = anova(lmdl)[2, c("F value","Pr(>F)")];
-	print( lmout );
+    cat("\n\n Matrix eQTL: \n");
+    print(rez);
+    cat("\n R anova(lm()) output: \n");
+    lmdl = lm( gene.mat ~ cvrt.mat + factor(snps.mat),
+                weights = 1/noise.std^2 );
+    lmout = anova(lmdl)[2, c("F value", "Pr(>F)")];
+    print( lmout );
 }
 
 # Results from Matrix eQTL and "lm" must agree
-stopifnot(all.equal(lmout, rez, check.attributes=FALSE));
+stopifnot(all.equal(lmout, rez, check.attributes = FALSE));

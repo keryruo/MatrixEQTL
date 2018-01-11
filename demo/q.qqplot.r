@@ -23,20 +23,17 @@ rm(snps.mat, gene.mat);
 snps1$ResliceCombined(500);
 gene1$ResliceCombined(500);
 
-# Produce no output files
-filename = NULL; # tempfile()
-
 # Perform analysis recording information for a Q-Q plot
 me = Matrix_eQTL_main(
-	snps = snps1, 
-	gene = gene1, 
-	cvrt = cvrt1, 
-	output_file_name = filename,
-	pvOutputThreshold = 1e-6, 
-	useModel = modelLINEAR, 
-	errorCovariance = numeric(), 
-	verbose = TRUE,
-	pvalue.hist = "qqplot");
+    snps = snps1,
+    gene = gene1,
+    cvrt = cvrt1,
+    output_file_name = NULL,
+    pvOutputThreshold = 1e-6,
+    useModel = modelLINEAR,
+    errorCovariance = numeric(),
+    verbose = TRUE,
+    pvalue.hist = "qqplot");
 
 # png(filename = "QQplot.png", width = 650, height = 650);
 plot(me, pch = 16, cex = 0.7, ylim = c(0,11));

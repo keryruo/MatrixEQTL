@@ -16,14 +16,14 @@ base.dir = find.package('MatrixEQTL');
 useModel = modelLINEAR; # modelANOVA, modelLINEAR, or modelLINEAR_CROSS
 
 # Genotype file name
-SNP_file_name = paste(base.dir, "/data/SNP.txt", sep="");
+SNP_file_name = paste0(base.dir, "/data/SNP.txt");
 
 # Gene expression file name
-expression_file_name = paste(base.dir, "/data/GE.txt", sep="");
+expression_file_name = paste0(base.dir, "/data/GE.txt");
 
 # Covariates file name
 # Set to character() for no covariates
-covariates_file_name = paste(base.dir, "/data/Covariates.txt", sep="");
+covariates_file_name = paste0(base.dir, "/data/Covariates.txt");
 
 # Output file name
 output_file_name = tempfile();
@@ -65,32 +65,32 @@ cvrt$fileOmitCharacters = "NA"; # denote missing values;
 cvrt$fileSkipRows = 1;          # one row of column labels
 cvrt$fileSkipColumns = 1;       # one column of row labels
 if(length(covariates_file_name)>0) {
-	cvrt$LoadFile(covariates_file_name);
+    cvrt$LoadFile(covariates_file_name);
 }
 
 ## Run the analysis
 
 me = Matrix_eQTL_engine(
-		snps = snps,
-		gene = gene,
-		cvrt = cvrt,
-		output_file_name = output_file_name,
-		pvOutputThreshold = pvOutputThreshold,
-		useModel = useModel, 
-		errorCovariance = errorCovariance, 
-		verbose = TRUE,
-		pvalue.hist = TRUE,
-		min.pv.by.genesnp = FALSE,
-		noFDRsaveMemory = FALSE);
+        snps = snps,
+        gene = gene,
+        cvrt = cvrt,
+        output_file_name = output_file_name,
+        pvOutputThreshold = pvOutputThreshold,
+        useModel = useModel, 
+        errorCovariance = errorCovariance, 
+        verbose = TRUE,
+        pvalue.hist = TRUE,
+        min.pv.by.genesnp = FALSE,
+        noFDRsaveMemory = FALSE);
 
 unlink(output_file_name);
 
 ## Results:
 
-cat('Analysis done in: ', me$time.in.sec, ' seconds', '\n');
-cat('Detected eQTLs:', '\n');
-show(me$all$eqtls)
+message('Analysis done in: ', me$time.in.sec, ' seconds');
+message('Detected eQTLs:');
+show(me$all$eqtls);
 
 ## Plot the histogram of all p-values
 
-plot(me)
+plot(me);

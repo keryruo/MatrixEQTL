@@ -3,16 +3,18 @@
 
 \title{Sample code for cis/trans-eQTL analysis with Matrix eQTL}
 \description{
-  The following code is the best starting point for those who want to perform cis-/trans-eQTL analysis with Matrix eQTL.
+    The following code is the best starting point for those 
+    who want to perform cis-/trans-eQTL analysis with Matrix eQTL.
 }
 \references{
-  The package website: \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
+    The package website:
+    \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
 }
 \seealso{
-  See \code{\link{Matrix_eQTL_engine}} for reference and other sample code.
+    See \code{\link{Matrix_eQTL_engine}} for reference and other sample code.
 }
 \author{
-  Andrey A Shabalin \email{andrey.shabalin@gmail.com}
+    Andrey A Shabalin \email{andrey.shabalin@gmail.com}
 }
 \examples{
 # Matrix eQTL by Andrey A. Shabalin
@@ -32,16 +34,16 @@ base.dir = find.package('MatrixEQTL');
 useModel = modelLINEAR; # modelANOVA, modelLINEAR, or modelLINEAR_CROSS
 
 # Genotype file name
-SNP_file_name = paste(base.dir, "/data/SNP.txt", sep="");
-snps_location_file_name = paste(base.dir, "/data/snpsloc.txt", sep="");
+SNP_file_name = paste0(base.dir, "/data/SNP.txt");
+snps_location_file_name = paste0(base.dir, "/data/snpsloc.txt");
 
 # Gene expression file name
-expression_file_name = paste(base.dir, "/data/GE.txt", sep="");
-gene_location_file_name = paste(base.dir, "/data/geneloc.txt", sep="");
+expression_file_name = paste0(base.dir, "/data/GE.txt");
+gene_location_file_name = paste0(base.dir, "/data/geneloc.txt");
 
 # Covariates file name
 # Set to character() for no covariates
-covariates_file_name = paste(base.dir, "/data/Covariates.txt", sep="");
+covariates_file_name = paste0(base.dir, "/data/Covariates.txt");
 
 # Output file name
 output_file_name_cis = tempfile();

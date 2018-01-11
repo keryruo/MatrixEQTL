@@ -2,13 +2,23 @@
 \alias{modelLINEAR_CROSS}
 \docType{data}
 \title{
-	Constant for \code{\link{Matrix_eQTL_engine}}.
+    Constant for \code{\link{Matrix_eQTL_engine}}.
 }
 \description{
-	Set parameter \code{useModel = modelLINEAR_CROSS} in the call of \code{\link{Matrix_eQTL_main}} to indicate that Matrix eQTL should include the interaction of SNP and last covariate in the model and test for its significance.
+    Set parameter \code{useModel = modelLINEAR_CROSS} in the call of
+    \code{\link{Matrix_eQTL_main}} to indicate that Matrix eQTL should
+    include the interaction of SNP and the
+    last covariate in the model and test for its significance.
+}
+\references{
+    The package website:
+    \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
+}
+\seealso{
+    See \code{\link{Matrix_eQTL_engine}} for reference and sample code.
 }
 \examples{
-library('MatrixEQTL')	
+library('MatrixEQTL')    
 
 # Number of columns (samples)
 n = 25;
@@ -25,7 +35,7 @@ cvrt.mat = 2 + matrix(rnorm(n*nc), ncol = nc);
 # Generate the vectors with single genotype and expression variables
 snps.mat = cvrt.mat \%*\% rnorm(nc) + rnorm(n);
 gene.mat = cvrt.mat \%*\% rnorm(nc) + rnorm(n) * noise.std + 
-           1 + 0.5 * snps.mat + snps.mat * cvrt.mat[,nc];
+            1 + 0.5 * snps.mat + snps.mat * cvrt.mat[,nc];
 
 # Create 3 SlicedData objects for the analysis
 snps1 = SlicedData$new( matrix( snps.mat, nrow = 1 ) );
@@ -37,15 +47,15 @@ filename = tempfile();
 
 # Call the main analysis function
 me = Matrix_eQTL_main(
-  snps = snps1, 
-  gene = gene1, 
-  cvrt = cvrt1, 
-  output_file_name = filename, 
-  pvOutputThreshold = 1, 
-  useModel = modelLINEAR_CROSS, 
-  errorCovariance = diag(noise.std^2), 
-  verbose = TRUE,
-  pvalue.hist = FALSE );
+    snps = snps1, 
+    gene = gene1, 
+    cvrt = cvrt1, 
+    output_file_name = filename, 
+    pvOutputThreshold = 1, 
+    useModel = modelLINEAR_CROSS, 
+    errorCovariance = diag(noise.std^2), 
+    verbose = TRUE,
+    pvalue.hist = FALSE );
 # remove the output file
 unlink( filename );
 
@@ -56,21 +66,16 @@ pvalue = me$all$eqtls$pvalue;
 rez = c(beta = beta, tstat = tstat, pvalue = pvalue)
 # And compare to those from the linear regression in R
 {
-  cat('\n\n Matrix eQTL: \n'); 
-  print(rez);
-  cat('\n R summary(lm()) output: \n')
-  lmodel = lm( gene.mat ~ snps.mat + cvrt.mat + snps.mat*cvrt.mat[,nc], 
-               weights = 1/noise.std^2 );
-  lmout = tail(summary( lmodel )$coefficients,1)[,c(1,3,4)];
-  print( tail(lmout) );
+    cat('\n\n Matrix eQTL: \n'); 
+    print(rez);
+    cat('\n R summary(lm()) output: \n')
+    lmodel = lm( gene.mat ~ snps.mat + cvrt.mat + snps.mat*cvrt.mat[,nc], 
+                    weights = 1/noise.std^2);
+    lmout = tail(summary(lmodel)$coefficients,1)[, c("Estimate", "t value", "Pr(>|t|)")];
+    print( tail(lmout) );
 }
 
 # Results from Matrix eQTL and 'lm' must agree
-stopifnot(all.equal(lmout, rez, check.attributes=FALSE))
+stopifnot(all.equal(lmout, rez, check.attributes = FALSE));
 }
-\references{
-	The package website: \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
-}
-\seealso{
-	See \code{\link{Matrix_eQTL_engine}} for reference and sample code.
-}
+

@@ -16,16 +16,16 @@ base.dir = find.package('MatrixEQTL');
 useModel = modelLINEAR; # modelANOVA, modelLINEAR, or modelLINEAR_CROSS
 
 # Genotype file name
-SNP_file_name = paste(base.dir, "/data/SNP.txt", sep="");
-snps_location_file_name = paste(base.dir, "/data/snpsloc.txt", sep="");
+SNP_file_name = paste0(base.dir, "/data/SNP.txt");
+snps_location_file_name = paste0(base.dir, "/data/snpsloc.txt");
 
 # Gene expression file name
-expression_file_name = paste(base.dir, "/data/GE.txt", sep="");
-gene_location_file_name = paste(base.dir, "/data/geneloc.txt", sep="");
+expression_file_name = paste0(base.dir, "/data/GE.txt");
+gene_location_file_name = paste0(base.dir, "/data/geneloc.txt");
 
 # Covariates file name
 # Set to character() for no covariates
-covariates_file_name = paste(base.dir, "/data/Covariates.txt", sep="");
+covariates_file_name = paste0(base.dir, "/data/Covariates.txt");
 
 # Output file name
 output_file_name_cis = tempfile();
@@ -71,42 +71,44 @@ cvrt$fileOmitCharacters = "NA"; # denote missing values;
 cvrt$fileSkipRows = 1;          # one row of column labels
 cvrt$fileSkipColumns = 1;       # one column of row labels
 if(length(covariates_file_name)>0) {
-	cvrt$LoadFile(covariates_file_name);
+    cvrt$LoadFile(covariates_file_name);
 }
 
 ## Run the analysis
-snpspos = read.table(snps_location_file_name, header = TRUE, stringsAsFactors = FALSE);
-genepos = read.table(gene_location_file_name, header = TRUE, stringsAsFactors = FALSE);
+snpspos = read.table(snps_location_file_name,
+                        header = TRUE, stringsAsFactors = FALSE);
+genepos = read.table(gene_location_file_name,
+                        header = TRUE, stringsAsFactors = FALSE);
 
 me = Matrix_eQTL_main(
-		snps = snps, 
-		gene = gene, 
-		cvrt = cvrt,
-		output_file_name     = output_file_name_tra,
-		pvOutputThreshold     = pvOutputThreshold_tra,
-		useModel = useModel, 
-		errorCovariance = errorCovariance, 
-		verbose = TRUE, 
-		output_file_name.cis = output_file_name_cis,
-		pvOutputThreshold.cis = pvOutputThreshold_cis,
-		snpspos = snpspos, 
-		genepos = genepos,
-		cisDist = cisDist,
-		pvalue.hist = TRUE,
-		min.pv.by.genesnp = TRUE,
-		noFDRsaveMemory = FALSE);
+        snps = snps, 
+        gene = gene, 
+        cvrt = cvrt,
+        output_file_name  = output_file_name_tra,
+        pvOutputThreshold = pvOutputThreshold_tra,
+        useModel = useModel, 
+        errorCovariance = errorCovariance, 
+        verbose = TRUE, 
+        output_file_name.cis = output_file_name_cis,
+        pvOutputThreshold.cis = pvOutputThreshold_cis,
+        snpspos = snpspos, 
+        genepos = genepos,
+        cisDist = cisDist,
+        pvalue.hist = TRUE,
+        min.pv.by.genesnp = TRUE,
+        noFDRsaveMemory = FALSE);
 
 unlink(output_file_name_tra);
 unlink(output_file_name_cis);
 
 ## Results:
 
-cat('Analysis done in: ', me$time.in.sec, ' seconds', '\n');
-cat('Detected local eQTLs:', '\n');
-show(me$cis$eqtls)
-cat('Detected distant eQTLs:', '\n');
-show(me$trans$eqtls)
+message('Analysis done in: ', me$time.in.sec, ' seconds');
+message('Detected local eQTLs:');
+show(me$cis$eqtls);
+message('Detected distant eQTLs:');
+show(me$trans$eqtls);
 
 ## Plot the histogram of local and distant p-values
 
-plot(me)
+plot(me);

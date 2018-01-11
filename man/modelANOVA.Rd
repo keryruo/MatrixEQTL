@@ -2,25 +2,34 @@
 \alias{modelANOVA}
 \docType{data}
 \title{
-	Constant for \code{\link{Matrix_eQTL_engine}}.
+    Constant for \code{\link{Matrix_eQTL_engine}}.
 }
 \description{
-	Set parameter \code{useModel = modelANOVA} in the call of \code{\link{Matrix_eQTL_main}} to indicate that the genotype should be treated as a categorical variable.
+    Set parameter \code{useModel = modelANOVA} in the call of
+    \code{\link{Matrix_eQTL_main}} to indicate that the genotype
+    should be treated as a categorical variable.
 }
 \note{
-By default, the number of ANOVA categories is fixed to be 3.
-
-To set it to a different number (say, 4) use the following command:
-
-\code{options(MatrixEQTL.ANOVA.categories=4)}
-
-To check the current settings run:
-
-\code{getOption('MatrixEQTL.ANOVA.categories', 3);}
+    By default, the number of ANOVA categories is fixed to be 3.
+    
+    To set it to a different number (say, 4) use the following command:
+    
+    \code{options(MatrixEQTL.ANOVA.categories=4)}
+    
+    To check the current settings run:
+    
+    \code{getOption("MatrixEQTL.ANOVA.categories", 3);}
+}
+\references{
+    The package website:
+    \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
+}
+\seealso{
+    See \code{\link{Matrix_eQTL_engine}} for reference and sample code.
 }
 \examples{
-library('MatrixEQTL')	
-			
+library("MatrixEQTL")    
+            
 # Number of columns (samples)
 n = 100;
 
@@ -50,15 +59,15 @@ gene1
 
 # Call the main analysis function
 me = Matrix_eQTL_main(
-  snps = snps1, 
-  gene = gene1, 
-  cvrt = cvrt1, 
-  output_file_name = filename, 
-  pvOutputThreshold = 1, 
-  useModel = modelANOVA, 
-  errorCovariance = diag(noise.std^2), 
-  verbose = TRUE,
-  pvalue.hist = FALSE );
+    snps = snps1, 
+    gene = gene1, 
+    cvrt = cvrt1, 
+    output_file_name = filename, 
+    pvOutputThreshold = 1, 
+    useModel = modelANOVA, 
+    errorCovariance = diag(noise.std^2), 
+    verbose = TRUE,
+    pvalue.hist = FALSE );
 # remove the output file
 unlink( filename );
 
@@ -69,20 +78,15 @@ pvalue = me$all$eqtls$pvalue;
 rez = c( Fstat = fstat, pvalue = pvalue)
 # And compare to those from ANOVA in R
 {
-  cat('\n\n Matrix eQTL: \n'); 
-  print(rez);
-  cat('\n R anova(lm()) output: \n')
-  lmodel = lm( gene.mat ~ cvrt.mat + factor(snps.mat), weights = 1/noise.std^2 );
-  lmout = anova( lmodel )[2, 4:5];
-  print( lmout )
+    cat("\n\n Matrix eQTL: \n"); 
+    print(rez);
+    cat("\n R anova(lm()) output: \n")
+    lmodel = lm( gene.mat ~ cvrt.mat + factor(snps.mat), weights = 1/noise.std^2);
+    lmout = anova(lmodel)[2, c("F value", "Pr(>F)")];
+    print( lmout )
 }
 
-# Results from Matrix eQTL and 'lm' must agree
-stopifnot(all.equal(lmout, rez, check.attributes=FALSE))
+# Results from Matrix eQTL and "lm" must agree
+stopifnot(all.equal(lmout, rez, check.attributes = FALSE));
 }
-\references{
-	The package website: \url{http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/}
-}
-\seealso{
-	See \code{\link{Matrix_eQTL_engine}} for reference and sample code.
-}
+
