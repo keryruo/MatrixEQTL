@@ -1938,7 +1938,6 @@ Matrix_eQTL_main = function(
                             digits = 2);
                     
                     message(per, "% done", rp);
-                    flush.console();
                 }
             } # gg in 1:gene$nSlices()
             snps_offset = snps_offset + nrcs;
