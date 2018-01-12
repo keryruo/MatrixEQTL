@@ -38,4 +38,4 @@ importFrom("methods",
 importFrom("stats",
               "complete.cases", "pf", "pt", "qf", "qt")
 importFrom("utils",
-              "flush.console", "tail", "tail.matrix")
+              "tail", "tail.matrix")
