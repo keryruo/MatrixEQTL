@@ -14,7 +14,6 @@
         id     \tab Sam_01   \tab Sam_02 \tab \ldots \cr
         gender \tab 0        \tab 0      \tab \ldots \cr
         age    \tab 40       \tab 46     \tab \ldots \cr
-        
     }
 }
 \references{

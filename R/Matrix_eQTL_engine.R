@@ -1,15 +1,13 @@
 # Matrix eQTL by Andrey A. Shabalin
 # http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/
 
-# http://cran.r-project.org/web/packages/policies.html
-
 library(methods)
 
 modelLINEAR = 117348L;
 modelANOVA  = 47074L;
 modelLINEAR_CROSS = 1113461L;
 
-.seq = function(a,b){if(a<=b){a:b}else{NULL}};
+.seq = function(a,b){if(a<=b){a:b}else{NULL}}
 
 formatnum = function(x, digits = 0){
     formatC(
@@ -337,7 +335,7 @@ SlicedData = setRefClass("SlicedData",
                 if(nRows1 == 0L){
                     return(invisible(.self));
                 }
-                newNSlices = floor( (nRows1 + fileSliceSize - 1)/fileSliceSize );
+                newNSlices = floor((nRows1 + fileSliceSize - 1)/fileSliceSize);
                 oldData = getSliceRaw(1L);
                 #oldNames = rowNameSlices[[1]];
                 newNameslices = vector("list",newNSlices)
@@ -445,7 +443,7 @@ SlicedData = setRefClass("SlicedData",
             ## Make slices back
             nrows = length(all_rows);
             nSlices1 <<- as.integer((nrows+fileSliceSize-1)/fileSliceSize);
-            ##cat(nrows, " ", nSlices1);
+            
             rowNameSlices1 = vector("list", nSlices1);
             for( i in seq_len(nSlices1) ){
                 fr = 1 + fileSliceSize*(i-1);
@@ -903,7 +901,10 @@ setMethod(
                     fid <<- list(filename, FALSE)
                 }
                 writeLines(
-                    text = paste0("SNP\tgene\t", statistic_name, "\tp-value\tFDR"),
+                    text = paste0(
+                                "SNP\tgene\t",
+                                statistic_name,
+                                "\tp-value\tFDR"),
                     con = fid[[1]]);
             } else {
                 fid <<- list();
@@ -1358,7 +1359,6 @@ Matrix_eQTL_main = function(
                 }
                 message(text);
                 lastTime <<- newTime;
-                unused = flush.console();
             }
         } else {
             status = function(text){}
@@ -2103,10 +2103,8 @@ plot.MatrixEQTL = function(
             .qqme( x$trans, "blue", cex, pch, ...);
             if(is.null(main)) {
                 main = paste("QQ-plot for",
-                            formatnum(x$cis$ntests),
-                            "local and",
-                            formatnum(x$trans$ntests),
-                            "distant p-values");
+                            formatnum(x$cis$ntests), "local and",
+                            formatnum(x$trans$ntests), "distant p-values");
             }
             lset = c(1,2,4);
         } else
@@ -2114,16 +2112,14 @@ plot.MatrixEQTL = function(
             .qqme(x$cis, "red", cex, pch, ...);
             if(is.null(main)){
                 main = paste("QQ-plot for",
-                            formatnum(x$cis$ntests),
-                            "local p-values");
+                            formatnum(x$cis$ntests), "local p-values");
             }
             lset = c(1,4);
         } else {
             .qqme(x$all, "blue", cex, pch, ...);
             if(is.null(main)){
                 main = paste("QQ-plot for all",
-                            formatnum(x$all$ntests),
-                            "p-values");
+                            formatnum(x$all$ntests), "p-values");
             }
             lset = c(3,4);
         }
@@ -2134,12 +2130,13 @@ plot.MatrixEQTL = function(
                 "Distant p-values",
                 "All p-values",
                 "diagonal")[lset],
-            col =      c("red","blue","blue","gray")[lset],
-            text.col = c("red","blue","blue","gray")[lset],
+            col =      c("red", "blue", "blue", "gray")[lset],
+            text.col = c("red", "blue", "blue", "gray")[lset],
             pch = 20, lwd = 1, pt.cex = c(1,1,1,0)[lset])
     } else {
-        if((x$param$pvOutputThreshold > 0) && 
-           (x$param$pvOutputThreshold.cis > 0) ){
+        if( (x$param$pvOutputThreshold > 0) && 
+            (x$param$pvOutputThreshold.cis > 0) ){
+            
             par(mfrow = c(2,1));
             .histme(x$cis, "", " local", ...);
             tran = list(hist.counts = x$all$hist.counts - x$cis$hist.counts,
