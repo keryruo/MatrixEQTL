@@ -1,8 +1,6 @@
 # Matrix eQTL by Andrey A. Shabalin
 # http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/
 
-library(methods)
-
 modelLINEAR = 117348L;
 modelANOVA  = 47074L;
 modelLINEAR_CROSS = 1113461L;
@@ -2019,7 +2017,7 @@ Matrix_eQTL_main = function(
                 mids = centers,
                 equidist = FALSE),
             class = "histogram");
-    plot(r, main = ntext, ylab = "Density", xlab = "P-values", ...)
+    plot(r, main = ntext, ylab = "Density", xlab = "P-values", ...);
     abline(h = 1, col = "blue");
     return(invisible());
 }
