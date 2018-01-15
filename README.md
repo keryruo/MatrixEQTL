@@ -18,7 +18,7 @@ For more details see
 
 To install the
 [CRAN version](https://CRAN.R-project.org/package=MatrixEQTL)
-of `MatrixEQTL`.
+of `MatrixEQTL`, run
 
 ```
 install.packages("MatrixEQTL")
@@ -26,7 +26,7 @@ install.packages("MatrixEQTL")
 
 ### Install GitHub Version
 
-To install `MatrixEQTL` directly from GitHub run
+To install `MatrixEQTL` directly from GitHub, run
 
 ```
 devtools::install_github("andreyshabalin/MatrixEQTL")
