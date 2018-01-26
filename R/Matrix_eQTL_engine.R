@@ -1353,7 +1353,8 @@ Matrix_eQTL_main = function(
                 # gc();
                 newTime = proc.time()[3];
                 if(lastTime != 0){
-                    message("Task finished in ", newTime-lastTime, " seconds");
+                    message("Task finished in ", round(newTime-lastTime,3),
+                            " seconds");
                 }
                 message(text);
                 lastTime <<- newTime;
@@ -1418,7 +1419,8 @@ Matrix_eQTL_main = function(
         if( max(snpsmatch) == 0 ){
             stop("SNP names do not match those in the SNP location file.");
         }
-        message( sum(snpsmatch>0), "of", length(snps_names), " SNPs matched\n");
+        message(sum(snpsmatch>0), " of ", length(snps_names), 
+                " SNPs matched\n");
         
         # list used chr names
         chrNames = unique(c( 
