@@ -1732,8 +1732,13 @@ Matrix_eQTL_main = function(
             # ge.r = sapply(geneloc, function(x)x[nrow(x) , 2] );
             sn.l = sapply(snpsloc, "[", 1 );
             sn.r = sapply(snpsloc, tail, 1 );
-            ge.l = sapply(geneloc, "[", 1, 1 );
-            ge.r = sapply( lapply(geneloc, tail.matrix, 1 ), "[", 2);
+            ge.l = sapply(geneloc, min);
+            ge.r = sapply(geneloc, max);
+            
+            # For find interval
+            ge.l = rev(cummin(rev(ge.l)));
+            ge.r = cummax(ge.r);
+            
             gg.1 = findInterval( sn.l, ge.r + cisDist + 1) + 1;
             gg.2 = findInterval( sn.r, ge.l - cisDist );
             rm(sn.l, sn.r, ge.l, ge.r);
