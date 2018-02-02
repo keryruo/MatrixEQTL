@@ -1852,7 +1852,8 @@ Matrix_eQTL_main = function(
                     xx = unlist(lapply(
                                 X = which(sn.r>sn.l),
                                 FUN = function(x){
-                                    (sn.l[x]:(sn.r[x]-1))*nrow(statistic) + x
+                                    (sn.l[x]:(sn.r[x]-1)) * 
+                                    as.numeric(nrow(statistic)) + x
                                 }));
                     select.cis.raw = xx[ astatistic[xx] >= thresh.cis ];
                     select.cis = arrayInd(select.cis.raw, dim(statistic));
