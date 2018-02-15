@@ -1069,7 +1069,7 @@ setMethod(
                         row.names = FALSE,
                         col.names = FALSE);
         },
-        getResults = function(){
+        getResults = function(...){
             if( length(fid)>0 ){    
                 if(fid[[2]]){
                     close(fid[[1]]);
