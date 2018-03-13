@@ -1,13 +1,13 @@
 # Matrix eQTL by Andrey A. Shabalin
 # http://www.bios.unc.edu/research/genomic_software/Matrix_eQTL/
 
-modelLINEAR = 117348L;
+modelLINEAR = 117348L; # num+L 表示integer
 modelANOVA  = 47074L;
 modelLINEAR_CROSS = 1113461L;
 
-.seq = function(a,b){if(a<=b){a:b}else{NULL}}
+.seq = function(a,b){if(a<=b){a:b}else{NULL}} # 如果a小于b，则生成等差数列a,a+1,a+2,---,b
 
-formatnum = function(x, digits = 0){
+formatnum = function(x, digits = 0){  # formatC 将数据格式整理成C语言式风格
     formatC(
         x = x,
         big.mark = ",",
@@ -15,9 +15,11 @@ formatnum = function(x, digits = 0){
         digits = digits);
 }
 
-SlicedData = setRefClass("SlicedData",
+# RC与S3和S4一样都是R中的对象系统，RC有专门的类的定义函数setRefClass() 
+
+SlicedData = setRefClass("SlicedData", # SlicedData是定义的一个类
     fields = list( 
-        dataEnv = "environment",
+        dataEnv = "environment", # R中还有environment这种class?
         nSlices1 = "numeric",
         rowNameSlices = "list",
         columnNames = "character",
@@ -26,13 +28,13 @@ SlicedData = setRefClass("SlicedData",
         fileSkipRows = "numeric",
         fileSliceSize = "numeric",
         fileOmitCharacters = "character"
-    ),
-    methods = list(
+    ),  # fields 定义属性及属性类型
+    methods = list(  # methods 定义类中的方法
         initialize = function( mat = NULL ){
             dataEnv <<- new.env(hash = TRUE, size = 29L);
             nSlices1 <<- 0L;
             if(!is.null(mat)){
-                CreateFromMatrix(mat);
+                CreateFromMatrix(mat); # CreateFromMatrix 是一个自定义函数
             }
             fileSliceSize <<- 1000;
             fileDelimiter <<- "\t";
@@ -43,7 +45,7 @@ SlicedData = setRefClass("SlicedData",
         },
         CreateFromMatrix = function( mat ){
             stopifnot( class(mat) == "matrix" );
-            setSliceRaw( 1L ,mat );
+            setSliceRaw( 1L ,mat );  # setSliceRaw是一个自定义函数
             rns = rownames( mat, do.NULL = FALSE);
             rowNameSlices <<- list(rns);
             cns = colnames( mat, do.NULL = FALSE );
@@ -118,7 +120,7 @@ SlicedData = setRefClass("SlicedData",
                         raw = FALSE);
             # clean object if file is open
             Clear(); 
-            lines = readLines(
+            lines = readLines(  # readLines ？ 不像是一个自定义函数？？
                         con = fid,
                         n = max(fileSkipRows,1L),
                         ok = TRUE,
@@ -712,7 +714,7 @@ setMethod(
         return(thesum/thecounts);
     })
 
-.listBuilder = setRefClass(".listBuilder",
+.listBuilder = setRefClass(".listBuilder", # .listBuilder 也是一个自定义的类
     fields = list(
         dataEnv = "environment",
         n = "integer"
@@ -1164,7 +1166,7 @@ Matrix_eQTL_engine = function(
                         output_file_name, 
                         pvOutputThreshold = 1e-5, 
                         useModel = modelLINEAR, 
-                        errorCovariance = numeric(), 
+                        errorCovariance = numeric(),  # errorCovariance 需要用户提供？
                         verbose = TRUE,
                         pvalue.hist = FALSE,
                         min.pv.by.genesnp = FALSE,
@@ -1181,9 +1183,9 @@ Matrix_eQTL_engine = function(
                 pvalue.hist = pvalue.hist,
                 min.pv.by.genesnp = min.pv.by.genesnp,
                 noFDRsaveMemory = noFDRsaveMemory);
-    return( rez );
-}
-
+    return( rez );           # Matrix_eQTL_engine 函数中只是嵌套了一个函数Matrix_eQTL_main而已，那为什么还要Matrix_eQTL_engine？
+}                            # 仅仅Matrix_eQTL_main就足够了呀 ？？
+# main coding ??
 Matrix_eQTL_main = function(    
                         snps, 
                         gene, 
@@ -1320,7 +1322,7 @@ Matrix_eQTL_main = function(
         }
     }
     ############################## Initial setup ##############################
-    {
+    {            #初始化设置
         gene.std = .listBuilder$new();
         snps.std = .listBuilder$new();
         
@@ -1365,19 +1367,19 @@ Matrix_eQTL_main = function(
         start.time = proc.time()[3];
     }
     #################### Error covariance matrix processing ####################
-    {
+    {           #误差协方差矩阵处理
         if( length(errorCovariance) > 0 ){
             status("Processing the error covariance matrix");
-            eig = eigen(errorCovariance, symmetric = TRUE)
-            d = eig$values;
-            v = eig$vectors;
-            #  errorCovariance == v %*% diag(d) %*% t(v)
+            eig = eigen(errorCovariance, symmetric = TRUE) # eigen特征根
+            d = eig$values; # eig$values 提取特征根
+            v = eig$vectors; # 提取特征向量
+            #  errorCovariance == v %*% diag(d) %*% t(v) #矩阵特征分解不是对应为 v %*% diag(d) %*% v-1吗？
             #  errorCovariance^0.5 == v*sqrt(d)*v" (no single quotes anymore)
             #  errorCovariance^(-0.5) == v*diag(1./sqrt(diag(d)))*v"
             if( any(d<=0) ){
                 stop("The covariance matrix is not positive definite");
             }
-            correctionMatrix = v %*% diag(1./sqrt(d)) %*% t(v);
+            correctionMatrix = v %*% diag(1./sqrt(d)) %*% t(v); # correctionMatrix=errorCovariance
             rm( eig, v, d, errorCovariance )
         } else {
             rm( errorCovariance );
@@ -1402,8 +1404,8 @@ Matrix_eQTL_main = function(
         }
         
         # match with the location data
-        genematch = match(gene_names, genepos[[1]], nomatch = 0L);
-        usedgene = matrix(FALSE, nrow(genepos), 1); 
+        genematch = match(gene_names, genepos[[1]], nomatch = 0L); # genepos is a dataframe and rownames(genepos) is the same type as gene_names
+        usedgene = matrix(FALSE, nrow(genepos), 1);     # seq_along(matr) seq_along(dataframe) get total different results
         # genes in "genepos" that are matching  "gene_names"
         usedgene[ genematch ] = TRUE;
         if( max(genematch) == 0 ){
@@ -1687,7 +1689,7 @@ Matrix_eQTL_main = function(
                             "Expected number of findings > ", 
                             pvOutputThreshold * gene$nRows() * snps$nRows());
         if( (useModel == modelLINEAR) || (useModel == modelLINEAR_CROSS) ){
-            statistic_name = "t-stat";
+            statistic_name = "t-stat";  # which test to use？
         } else if( useModel == modelANOVA ){
             statistic_name = "F-test";
         }
@@ -1703,10 +1705,10 @@ Matrix_eQTL_main = function(
     }
     ########################## Some useful functions ##########################
     {
-        orthonormalize.snps = function(cursnps, ss){
-            for(p in seq_along(cursnps)){
+        orthonormalize.snps = function(cursnps, ss){  # 先将矩阵正交化？
+            for(p in seq_along(cursnps)){         # seq_along is somewhat like seq, but seq_along is good for subscript
                 if(length(correctionMatrix)>0){
-                    cursnps[[p]] = cursnps[[p]] %*% correctionMatrix;
+                    cursnps[[p]] = cursnps[[p]] %*% correctionMatrix; # 矩阵乘法 “%*%”
                 }
                 rowsq1 = rowSums(cursnps[[p]]^2);
                 cursnps[[p]] = cursnps[[p]] - 
